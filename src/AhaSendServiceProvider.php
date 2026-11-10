@@ -7,8 +7,11 @@ namespace KobaltDigital\AhaSend;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\Client\Factory;
+use Illuminate\Mail\MailManager;
 use Illuminate\Support\ServiceProvider;
 use KobaltDigital\AhaSend\Exceptions\InvalidConfiguration;
+use KobaltDigital\AhaSend\Transport\AhaSendTransport;
+use Psr\Log\LoggerInterface;
 
 final class AhaSendServiceProvider extends ServiceProvider
 {
@@ -22,6 +25,7 @@ final class AhaSendServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->registerPublishing();
+        $this->registerTransport();
     }
 
     private function registerClient(): void
@@ -62,5 +66,21 @@ final class AhaSendServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../config/ahasend.php' => $this->app->configPath('ahasend.php'),
         ], 'ahasend-config');
+    }
+
+    private function registerTransport(): void
+    {
+        $this->callAfterResolving('mail.manager', function (MailManager $manager): void {
+            $manager->extend('ahasend', function (array $config = []): AhaSendTransport {
+                /** @var array{sandbox?: bool, track_opens?: bool|null, track_clicks?: bool|null} $options */
+                $options = array_intersect_key($config, array_flip(['sandbox', 'track_opens', 'track_clicks']));
+
+                return new AhaSendTransport(
+                    $this->app->make(AhaSend::class),
+                    $options,
+                    logger: $this->app->make(LoggerInterface::class),
+                );
+            });
+        });
     }
 }
