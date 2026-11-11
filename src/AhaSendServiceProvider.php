@@ -8,9 +8,12 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\Client\Factory;
 use Illuminate\Mail\MailManager;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use KobaltDigital\AhaSend\Exceptions\InvalidConfiguration;
+use KobaltDigital\AhaSend\Http\Middleware\VerifyWebhookSignature;
 use KobaltDigital\AhaSend\Transport\AhaSendTransport;
+use KobaltDigital\AhaSend\Webhooks\SignatureVerifier;
 use Psr\Log\LoggerInterface;
 
 final class AhaSendServiceProvider extends ServiceProvider
@@ -20,12 +23,14 @@ final class AhaSendServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/../config/ahasend.php', 'ahasend');
 
         $this->registerClient();
+        $this->registerSignatureVerifier();
     }
 
     public function boot(): void
     {
         $this->registerPublishing();
         $this->registerTransport();
+        $this->registerRoutes();
     }
 
     private function registerClient(): void
@@ -57,6 +62,24 @@ final class AhaSendServiceProvider extends ServiceProvider
         $this->app->alias(AhaSend::class, 'ahasend');
     }
 
+    private function registerSignatureVerifier(): void
+    {
+        $this->app->singleton(SignatureVerifier::class, static function (Application $app): SignatureVerifier {
+            $config = $app->make(Repository::class);
+
+            $secrets = $config->get('ahasend.webhook.secret');
+            $secrets = is_string($secrets) ? explode(',', $secrets) : (array) $secrets;
+            $secrets = array_map(static fn (mixed $secret): string => is_string($secret) ? trim($secret) : '', $secrets);
+
+            $tolerance = $config->get('ahasend.webhook.tolerance');
+
+            return new SignatureVerifier(
+                $secrets,
+                is_numeric($tolerance) ? (int) $tolerance : SignatureVerifier::DEFAULT_TOLERANCE,
+            );
+        });
+    }
+
     private function registerPublishing(): void
     {
         if (! $this->app->runningInConsole()) {
@@ -81,6 +104,27 @@ final class AhaSendServiceProvider extends ServiceProvider
                     logger: $this->app->make(LoggerInterface::class),
                 );
             });
+        });
+    }
+
+    private function registerRoutes(): void
+    {
+        $config = $this->app->make(Repository::class);
+
+        if (! $config->get('ahasend.routes', true)) {
+            return;
+        }
+
+        /** @var list<string> $middleware */
+        $middleware = (array) $config->get('ahasend.middleware', []);
+
+        Route::group([
+            'domain' => $config->get('ahasend.domain'),
+            'prefix' => $config->get('ahasend.path', 'ahasend'),
+            'as' => 'ahasend.',
+            'middleware' => [...$middleware, VerifyWebhookSignature::class],
+        ], function (): void {
+            $this->loadRoutesFrom(__DIR__.'/../routes/webhooks.php');
         });
     }
 }
