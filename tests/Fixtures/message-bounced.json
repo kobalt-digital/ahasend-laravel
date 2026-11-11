@@ -1,0 +1,21 @@
+{
+    "type": "message.bounced",
+    "webhook_id": "abe11757-2886-4b55-96f1-0e0afc95795a",
+    "timestamp": "2024-05-06T10:05:16.687031577Z",
+    "data": {
+        "account_id": "4cdd7bdd-294e-4762-892f-83d40abf5a87",
+        "event": "on_bounced",
+        "from": "sender@example.com",
+        "recipient": "recipient@example.com",
+        "subject": "Welcome to our service",
+        "message_id_header": "<message-id-12345@localhost>",
+        "id": "019a0c3e-7c3e-7b2a-9d4e-5f6a7b8c9d0e",
+        "delivery_attempt": {
+            "classification": "InvalidRecipient",
+            "smtp_code": 550,
+            "enhanced_status_code": "5.1.1",
+            "response": "The email account that you tried to reach does not exist",
+            "command": "RCPT TO"
+        }
+    }
+}

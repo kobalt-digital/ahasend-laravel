@@ -1,0 +1,18 @@
+{
+    "type": "message.routing",
+    "route_id": "abe11757-2886-4b55-96f1-0e0afc95795a",
+    "timestamp": "2024-05-06T13:15:46.404433272Z",
+    "data": {
+        "id": "019a0c3f-1d2e-7f3a-8b4c-5d6e7f8a9b0c",
+        "from": "customer@gmail.com",
+        "reply_to": "customer@gmail.com",
+        "to": "support@yourdomain.com",
+        "subject": "Help with my account",
+        "message_id": "<unique-message-id@gmail.com>",
+        "size": 2048,
+        "spam_score": 0.1,
+        "bounce": false,
+        "plain_body": "I need help with my account settings.",
+        "html_body": "<p>I need help with my account settings.</p>"
+    }
+}
