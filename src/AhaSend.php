@@ -149,7 +149,7 @@ class AhaSend
             ->asJson()
             ->timeout($this->timeout)
             ->withoutRedirecting()
-            ->withUserAgent('kobalt-digital/ahasend-laravel')
+            ->withUserAgent('kobaltdigital/ahasend-laravel')
             ->retry(
                 $this->retries + 1,
                 fn (int $attempt, mixed $exception): int => $this->retryDelay($attempt, $exception),

@@ -1,8 +1,8 @@
 # AhaSend for Laravel
 
 [![Tests](https://github.com/kobalt-digital/ahasend-laravel/actions/workflows/tests.yml/badge.svg)](https://github.com/kobalt-digital/ahasend-laravel/actions/workflows/tests.yml)
-[![Latest version](https://img.shields.io/packagist/v/kobalt-digital/ahasend-laravel.svg)](https://packagist.org/packages/kobalt-digital/ahasend-laravel)
-[![License](https://img.shields.io/packagist/l/kobalt-digital/ahasend-laravel.svg)](LICENSE)
+[![Latest version](https://img.shields.io/packagist/v/kobaltdigital/ahasend-laravel.svg)](https://packagist.org/packages/kobaltdigital/ahasend-laravel)
+[![License](https://img.shields.io/packagist/l/kobaltdigital/ahasend-laravel.svg)](LICENSE)
 
 Send mail from Laravel through [AhaSend](https://ahasend.com). You get a mail transport, a client for the rest of the API and a webhook endpoint that turns AhaSend events into Laravel events.
 
@@ -11,7 +11,7 @@ Requires PHP 8.2+ and Laravel 12 or 13.
 ## Installation
 
 ```bash
-composer require kobalt-digital/ahasend-laravel
+composer require kobaltdigital/ahasend-laravel
 ```
 
 Add your API key and account ID to `.env`. Both are in the AhaSend dashboard.

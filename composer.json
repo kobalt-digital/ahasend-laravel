@@ -1,5 +1,5 @@
 {
-    "name": "kobalt-digital/ahasend-laravel",
+    "name": "kobaltdigital/ahasend-laravel",
     "description": "AhaSend mail transport, API client and webhook handling for Laravel",
     "keywords": [
         "ahasend",
@@ -10,7 +10,7 @@
         "email",
         "webhooks"
     ],
-    "homepage": "https://github.com/kobalt-digital/ahasend-laravel",
+    "homepage": "https://github.com/kobaltdigital/ahasend-laravel",
     "license": "MIT",
     "authors": [
         {
@@ -19,8 +19,8 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/kobalt-digital/ahasend-laravel/issues",
-        "source": "https://github.com/kobalt-digital/ahasend-laravel"
+        "issues": "https://github.com/kobaltdigital/ahasend-laravel/issues",
+        "source": "https://github.com/kobaltdigital/ahasend-laravel"
     },
     "require": {
         "php": "^8.2",

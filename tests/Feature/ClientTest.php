@@ -29,7 +29,7 @@ it('authenticates with the api key', function (): void {
         && $request->url() === 'https://api.ahasend.com/v2/ping'
         && $request->hasHeader('Authorization', 'Bearer '.TestCase::API_KEY)
         && $request->hasHeader('Accept', 'application/json')
-        && $request->hasHeader('User-Agent', 'kobalt-digital/ahasend-laravel'));
+        && $request->hasHeader('User-Agent', 'kobaltdigital/ahasend-laravel'));
 });
 
 it('scopes requests to the account', function (): void {
